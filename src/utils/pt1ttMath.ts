@@ -32,8 +32,8 @@ export function computeDerived(state: WendetangenteState): DerivedValues {
 
   const xWP  = parseNum(state.xWP);
   const tWP  = parseNum(state.tWP);
-  const dxVal = parseNum(state.dx);
-  const dtVal = parseNum(state.dt);
+  const xP2  = parseNum(state.dx);   // absolute X-Koordinate von P2
+  const tP2  = parseNum(state.dt);   // absolute t-Koordinate von P2
 
   let t1Calc: number | null = null;
   let t2Calc: number | null = null;
@@ -45,14 +45,14 @@ export function computeDerived(state: WendetangenteState): DerivedValues {
   if (
     xA !== null && xE !== null &&
     xWP !== null && tWP !== null &&
-    dxVal !== null && dtVal !== null && dtVal !== 0
+    xP2 !== null && tP2 !== null && tP2 !== tWP
   ) {
-    const slope = dxVal / dtVal;
+    const slope = (xP2 - xWP) / (tP2 - tWP);
     if (slope !== 0) {
       const t1_raw = tWP + (xA - xWP) / slope;
       const t2_raw = tWP + (xE - xWP) / slope;
-      // Geometrische Prüfung: t1 vor WP, P2 zwischen WP und t2 (P2 darf nicht über XE hinausgehen)
-      if (t1_raw < tWP && t2_raw >= tWP + dtVal) {
+      // Geometrische Prüfung: t1 vor WP, t2 nach WP
+      if (t1_raw < tWP && t2_raw > tWP) {
         t1Calc = t1_raw;
         t2Calc = t2_raw;
       }
@@ -95,16 +95,14 @@ export function computeDerived(state: WendetangenteState): DerivedValues {
     );
   }
 
-  // ── Fehlermetriken ──────────────────────────────────────────────────────────
-  const activeModel = state.methode === 2 ? modelData2 : modelData1;
-
+  // ── Fehlermetriken Modell 1 ─────────────────────────────────────────────────
   let diffs: number[]       = [];
   let diffSquared: number[] = [];
   let cumSum: number[]      = [];
   let cumSumTotal: number | null = null;
 
-  if (activeModel.length > 0 && state.xData.length > 0) {
-    diffs       = state.xData.map((x, i) => x - activeModel[i]);
+  if (modelData1.length > 0 && state.xData.length > 0) {
+    diffs       = state.xData.map((x, i) => x - modelData1[i]);
     diffSquared = diffs.map(d => d * d);
     let acc = 0;
     cumSum = timeData.map((t, i) => {
@@ -115,12 +113,31 @@ export function computeDerived(state: WendetangenteState): DerivedValues {
     cumSumTotal = acc;
   }
 
+  // ── Fehlermetriken Modell 2 ─────────────────────────────────────────────────
+  let diffs2: number[]       = [];
+  let diffSquared2: number[] = [];
+  let cumSum2: number[]      = [];
+  let cumSumTotal2: number | null = null;
+
+  if (modelData2.length > 0 && state.xData.length > 0) {
+    diffs2       = state.xData.map((x, i) => x - modelData2[i]);
+    diffSquared2 = diffs2.map(d => d * d);
+    let acc2 = 0;
+    cumSum2 = timeData.map((t, i) => {
+      const dt = i === 0 ? 0 : t - timeData[i - 1];
+      acc2 += diffSquared2[i] * dt;
+      return acc2;
+    });
+    cumSumTotal2 = acc2;
+  }
+
   return {
     dX, dY, kS,
     t1Calc, t2Calc,
     TT, TG, TG1,
     modelData1, modelData2,
     diffs, diffSquared, cumSum, cumSumTotal,
+    diffs2, diffSquared2, cumSum2, cumSumTotal2,
   };
 }
 

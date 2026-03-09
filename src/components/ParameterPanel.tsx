@@ -121,10 +121,10 @@ export default function ParameterPanel({ state, derived, dispatch }: Props) {
   const dtV = parseNum(state.dt);
 
   const t0Error  = t0 !== null && t0 < 0;
-  const xWPError = state.xWP !== '' && (xWP === null || (xA !== null && xE !== null && (xWP < xA || xWP > xE)));
+  const xWPError = state.xWP !== '' && (xWP === null || (xA !== null && xE !== null && (xWP <= xA || xWP >= xE)));
   const tWPError = state.tWP !== '' && (tWP === null || (t0 !== null && t0 >= 0 && tWP <= t0));
-  const dxError  = state.dx  !== '' && (dxV === null || dxV === 0);
-  const dtError  = state.dt  !== '' && (dtV === null || dtV === 0);
+  const dxError  = state.dx  !== '' && (dxV === null || (xWP !== null && dxV <= xWP) || (xE !== null && dxV >= xE));
+  const dtError  = state.dt  !== '' && (dtV === null || (tWP !== null && dtV <= tWP));
 
   const dxDtEnabled = xWP !== null && tWP !== null;
 
@@ -220,11 +220,11 @@ export default function ParameterPanel({ state, derived, dispatch }: Props) {
             <NumInput value={state.tWP} step={0.01} error={tWPError} tip={TIPS.tWP}
               onChange={v => set('tWP', v)} />
 
-            {/* P₂: zweiter Tangentenpunkt (WP + Deltas) */}
-            <TipLbl tipKey="dx">XWP+ΔX</TipLbl>
+            {/* P₂: zweiter Tangentenpunkt (absolute Koordinaten) */}
+            <TipLbl tipKey="dx">X₂</TipLbl>
             <NumInput value={state.dx} step={0.01} error={dxError} tip={TIPS.dx}
               disabled={!dxDtEnabled} onChange={v => set('dx', v)} />
-            <TipLbl tipKey="dt">tWP+Δt</TipLbl>
+            <TipLbl tipKey="dt">t₂</TipLbl>
             <NumInput value={state.dt} step={0.01} error={dtError} tip={TIPS.dt}
               disabled={!dxDtEnabled} onChange={v => set('dt', v)} />
 

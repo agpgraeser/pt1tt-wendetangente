@@ -53,6 +53,10 @@ export interface DerivedValues {
   diffSquared: number[];
   cumSum: number[];
   cumSumTotal: number | null;
+  diffs2: number[];
+  diffSquared2: number[];
+  cumSum2: number[];
+  cumSumTotal2: number | null;
 }
 
 export interface ExcelParseResult {
