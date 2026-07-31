@@ -210,21 +210,21 @@ export default function ParameterPanel({ state, derived, dispatch }: Props) {
 
         {/* ── Abschnitt 3: Wendetangente Eingaben ── */}
         <Box sx={{ px: 2, py: 1.5 }}>
-          <SectionTitle>Wendetangente Eingaben</SectionTitle>
+          <SectionTitle>Tangentenpunkte (WP1, WP2) – Eingabe</SectionTitle>
           <Box sx={row4}>
             {/* P₁: Wendepunkt */}
-            <TipLbl tipKey="xWP">XWP</TipLbl>
+            <TipLbl tipKey="xWP">XWP1</TipLbl>
             <NumInput value={state.xWP} step={0.01} error={xWPError} tip={TIPS.xWP}
               onChange={v => set('xWP', v)} />
-            <TipLbl tipKey="tWP">tWP</TipLbl>
+            <TipLbl tipKey="tWP">tWP1</TipLbl>
             <NumInput value={state.tWP} step={0.01} error={tWPError} tip={TIPS.tWP}
               onChange={v => set('tWP', v)} />
 
             {/* P₂: zweiter Tangentenpunkt (absolute Koordinaten) */}
-            <TipLbl tipKey="dx">X₂</TipLbl>
+            <TipLbl tipKey="dx">XWP2</TipLbl>
             <NumInput value={state.dx} step={0.01} error={dxError} tip={TIPS.dx}
               disabled={!dxDtEnabled} onChange={v => set('dx', v)} />
-            <TipLbl tipKey="dt">t₂</TipLbl>
+            <TipLbl tipKey="dt">tWP2</TipLbl>
             <NumInput value={state.dt} step={0.01} error={dtError} tip={TIPS.dt}
               disabled={!dxDtEnabled} onChange={v => set('dt', v)} />
 

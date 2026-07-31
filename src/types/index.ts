@@ -22,8 +22,8 @@ export interface WendetangenteState {
   t0: string;
   xWP: string;   // Wendepunkt X-Wert
   tWP: string;   // Wendepunkt Zeit
-  dx: string;    // ΔX zum zweiten Tangentenpunkt
-  dt: string;    // Δt zum zweiten Tangentenpunkt
+  dx: string;    // X₂: absolute X-Koordinate des zweiten Tangentenpunkts
+  dt: string;    // t₂: absolute t-Koordinate des zweiten Tangentenpunkts
   methode: Methode;
   showMode: ShowMode;
   // Excel data

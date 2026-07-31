@@ -9,9 +9,9 @@ function parseNum(s: string): number | null {
  * Berechnet alle abgeleiteten Größen aus dem aktuellen State.
  *
  * Tangentendefinition:
- *   P₁ = (tWP,     xWP)       – Wendepunkt (erster Tangentenpunkt)
- *   P₂ = (tWP+Δt,  xWP+ΔX)   – zweiter Tangentenpunkt
- *   Steigung = ΔX / Δt
+ *   P₁ = (tWP,  xWP)  – Wendepunkt (erster Tangentenpunkt)
+ *   P₂ = (tP2,  xP2)  – zweiter Tangentenpunkt (absolute Koordinaten X₂, t₂)
+ *   Steigung = (xP2 − xWP) / (tP2 − tWP)
  *   t1Calc = tWP + (xA − xWP) / Steigung  → Tangente ∩ XA
  *   t2Calc = tWP + (xE − xWP) / Steigung  → Tangente ∩ XE
  *
@@ -30,10 +30,10 @@ export function computeDerived(state: WendetangenteState): DerivedValues {
   const dY = yA !== null && yE !== null ? yE - yA : null;
   const kS = dX !== null && dY !== null && dY !== 0 ? dX / dY : null;
 
-  const xWP  = parseNum(state.xWP);
-  const tWP  = parseNum(state.tWP);
-  const xP2  = parseNum(state.dx);   // absolute X-Koordinate von P2
-  const tP2  = parseNum(state.dt);   // absolute t-Koordinate von P2
+  const xWP = parseNum(state.xWP);
+  const tWP = parseNum(state.tWP);
+  const xP2 = parseNum(state.dx);   // absolute X-Koordinate von P₂
+  const tP2 = parseNum(state.dt);   // absolute t-Koordinate von P₂
 
   let t1Calc: number | null = null;
   let t2Calc: number | null = null;
@@ -42,6 +42,7 @@ export function computeDerived(state: WendetangenteState): DerivedValues {
   let TG1: number | null = null;
 
   // Tangentenschnittpunkte — unabhängig von t0
+  // P₁ = (tWP, xWP), P₂ = (tP2, xP2) → Steigung = (xP2−xWP)/(tP2−tWP)
   if (
     xA !== null && xE !== null &&
     xWP !== null && tWP !== null &&

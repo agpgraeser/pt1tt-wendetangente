@@ -1,0 +1,12 @@
+# Netlify-Build-Konfiguration – PT1TT Wendetangente
+# Deploy erfolgt automatisch bei jedem 'git push' (Continuous Deployment).
+
+[build]
+  command = "npm run build"   # tsc && vite build (siehe package.json)
+  publish = "dist"            # Vite-Ausgabeordner
+
+# SPA-Fallback: alle Pfade auf index.html leiten (verhindert 404 bei Reload/Deeplinks)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
