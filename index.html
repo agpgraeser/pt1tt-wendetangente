@@ -4,8 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AGP·Control – PT1TT · Wendetangente</title>
+    <link rel="stylesheet" href="/agp-design-system.css" />
   </head>
-  <body>
+  <body class="agp-app">
+
+    <header class="agp-header">
+      <div class="agp-brand">
+        <svg class="agp-brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.5)"/>
+          <path d="M5 24 L11 24 L11 12 Q16 6 19 11 T25 10" fill="none" stroke="#fff" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="5" y1="10" x2="25" y2="10" stroke="#4dd0c4" stroke-width="1.4" stroke-dasharray="2 2"/>
+        </svg>
+        <div class="agp-brand__word">AGP<b>·Control</b></div>
+      </div>
+      <div class="agp-header__sep"></div>
+      <div class="agp-header__title">PT1TT · Wendetangente
+        <small>PT1-Totzeit-Modell · Wendetangenten-Methode</small>
+      </div>
+      <div class="agp-header__spacer"></div>
+    </header>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
